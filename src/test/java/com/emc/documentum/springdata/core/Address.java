@@ -1,5 +1,6 @@
 package com.emc.documentum.springdata.core;
 
+import com.emc.documentum.springdata.entitymanager.mapping.DctmAttribute;
 import com.emc.documentum.springdata.entitymanager.mapping.DctmEntity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
@@ -21,6 +22,7 @@ public class Address {
     int doorNo;
     String street;
     String city;
+    @DctmAttribute("stat")
     String state;
     String country;
 

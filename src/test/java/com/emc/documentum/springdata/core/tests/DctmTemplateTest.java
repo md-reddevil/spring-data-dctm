@@ -45,8 +45,8 @@ public class DctmTemplateTest {
 
   @Before
   public void setUp() {
-    dctm.setCredentials(new UserCredentials("dmadmin", "password"));
-    dctm.setDocBase("FPIRepo");
+    dctm.setCredentials(new UserCredentials("dmadmin", "demo.demo"));
+    dctm.setDocBase("corp");
 
   }
 
@@ -90,7 +90,8 @@ public class DctmTemplateTest {
 
   }
 
-  @Test
+
+
   public void testForRepeatingAttributes() throws DfException {
 
     p = new Person("John", 67, "Male");

@@ -24,6 +24,7 @@ public class DctmRepositoryFactory extends RepositoryFactorySupport {
 
   public DctmRepositoryFactory(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
+
   }
 
   @Override
