@@ -8,9 +8,13 @@ import org.springframework.data.mapping.model.SimpleTypeHolder;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 
-/**
- * Created by waliar on 7/5/16.
+/*
+ * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
+ * EMC Confidential: Restricted Internal Distribution
+ *
+ * @author Raman Walia
  */
+
 public class BasicDctmPersistentProperty extends AnnotationBasedPersistentProperty<DctmPersistentProperty>
         implements DctmPersistentProperty{
 

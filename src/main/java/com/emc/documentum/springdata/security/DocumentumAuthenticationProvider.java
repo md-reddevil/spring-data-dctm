@@ -24,20 +24,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
  * EMC Confidential: Restricted Internal Distribution
  */
 
 /**
- * Created by Raman Walia
+ * @author Raman Walia
  */
+
 @Component
 public class DocumentumAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     Documentum documentum;
 
+    /**
+     * Authentication is hardwired to DCTM. However, this method can be overridden to
+     * change the authentication to any custom authentication.
+     *
+     * @param authentication
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 

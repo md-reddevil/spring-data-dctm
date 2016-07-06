@@ -18,8 +18,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by waliar on 7/5/16.
+ * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
+ * EMC Confidential: Restricted Internal Distribution
+ *
+ * @author Raman Walia
  */
+
+
 @Configuration
 public class DctmAutoConfiguration {
 
@@ -28,27 +33,6 @@ public class DctmAutoConfiguration {
     public DctmMappingContext mongoMappingContext(BeanFactory beanFactory)
             throws ClassNotFoundException {
         DctmMappingContext context = new DctmMappingContext();
-//        context.setInitialEntitySet(getInitialEntitySet(beanFactory));
         return context;
     }
-
-//    private Set<Class<?>> getInitialEntitySet(BeanFactory beanFactory)
-//            throws ClassNotFoundException {
-//        Set<Class<?>> entitySet = new HashSet<Class<?>>();
-//        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(
-//                false);
-//`        scanner.setResourceLoader(this.resourceLoader);
-//        scanner.addIncludeFilter(new AnnotationTypeFilter(Document.class));
-//        scanner.addIncludeFilter(new AnnotationTypeFilter(Persistent.class));
-//        for (String basePackage : getMappingBasePackages(beanFactory)) {
-//            if (StringUtils.hasText(basePackage)) {
-//                for (BeanDefinition candidate : scanner
-//                        .findCandidateComponents(basePackage)) {
-//                    entitySet.add(ClassUtils.forName(candidate.getBeanClassName(),
-//                            this.classLoader));
-//                }
-//            }
-//        }
-//        return entitySet;
-//    }
 }

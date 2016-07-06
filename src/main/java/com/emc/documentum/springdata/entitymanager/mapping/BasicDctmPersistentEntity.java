@@ -1,17 +1,21 @@
 package com.emc.documentum.springdata.entitymanager.mapping;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.expression.BeanFactoryAccessor;
-import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.data.mapping.model.BasicPersistentEntity;
 import org.springframework.data.util.TypeInformation;
 
 import java.util.Comparator;
 
 /**
- * Created by waliar on 7/5/16.
+ * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
+ * EMC Confidential: Restricted Internal Distribution
+ */
+
+
+/**
+ *
+ * @param <T>
+ *
+ * @author Raman Walia
  */
 public class BasicDctmPersistentEntity<T> extends BasicPersistentEntity<T, DctmPersistentProperty>
 
