@@ -85,7 +85,7 @@ public class DocumentumTest {
 	@Test
 	public void testDocumentumUserCredentialsStringString() throws DfException {
         String docBase = "corp";
-		Documentum docCreatedWithPrimaryHostAndPort = new Documentum(credentials, docBase, "172.16.253.152", "1489" );
+		Documentum docCreatedWithPrimaryHostAndPort = new Documentum(credentials, docBase, "172.16.253.160", "1489" );
 		IDfSession session = docCreatedWithPrimaryHostAndPort.getSession();
 		assertEquals(session.getDocbaseName(), docBase);
 	}
