@@ -3,6 +3,8 @@ package com.emc.documentum.springdata.repository.query;
 import java.lang.reflect.Method;
 
 import com.emc.documentum.springdata.repository.Query;
+
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.core.EntityMetadata;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryMethod;
@@ -24,10 +26,11 @@ public class DctmQueryMethod extends QueryMethod {
    *
    * @param method   must not be {@literal null}
    * @param metadata must not be {@literal null}
+   * @param factory must not be {@literal null}
    */
   @SuppressWarnings("unchecked")
-  public DctmQueryMethod(Method method, RepositoryMetadata metadata) {
-    super(method, metadata);
+  public DctmQueryMethod(Method method, RepositoryMetadata metadata, ProjectionFactory factory) {
+    super(method, metadata, factory);
     this.method = method;
     dctmEntityMetadata = new SimpleDctmEntityInformation(metadata.getDomainType());
   }

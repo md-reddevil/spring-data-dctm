@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.emc.documentum.springdata.core.Loan;
+import com.emc.documentum.springdata.repository.AbstractTest;
 import com.emc.documentum.springdata.core.*;
 
 import org.junit.Before;
@@ -17,15 +18,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.documentum.fc.common.DfException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-public class DctmTemplateTest {
+@SpringBootTest(classes = Application.class)
+public class DctmTemplateTest  extends AbstractTest { 
 
   private Person p;
 
@@ -43,12 +44,12 @@ public class DctmTemplateTest {
 
   }
 
-  @Before
-  public void setUp() {
-    dctm.setCredentials(new UserCredentials("dmadmin", "demo.demo"));
-    dctm.setDocBase("corp");
-
-  }
+//  @Before
+//  public void setUp() {
+//    dctm.setCredentials(new UserCredentials("dmadmin", "password"));
+//    dctm.setDocBase("MyRepo");
+//
+//  }
 
   //	@Test
   public void testSpringConfiguration() throws DfException {

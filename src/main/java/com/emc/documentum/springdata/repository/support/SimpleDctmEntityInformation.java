@@ -1,14 +1,12 @@
 package com.emc.documentum.springdata.repository.support;
 
-import java.io.Serializable;
-
 import com.emc.documentum.springdata.entitymanager.mapping.DctmEntity;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
  * EMC Confidential: Restricted Internal Distribution
  */
-public class SimpleDctmEntityInformation <T, ID extends Serializable>  implements DctmEntityInformation<T, ID> {
+public class SimpleDctmEntityInformation <T, ID>  implements DctmEntityInformation<T, ID> {
 //TODO: Adding fields & implementations on need basis
 
   private Class<T> javaType;

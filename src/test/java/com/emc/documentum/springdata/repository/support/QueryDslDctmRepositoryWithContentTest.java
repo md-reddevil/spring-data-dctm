@@ -62,7 +62,7 @@ public class QueryDslDctmRepositoryWithContentTest extends TestCase {
     for (Loan createdObject : createdObjects) {
       logger.info(createdObject);
     }
-    loanRepository.delete(createdObjects);
+    loanRepository.deleteAll(createdObjects);
     for (File file : filesToClean) {
       if(!file.delete()) {
         System.out.println(String.format("Failed to delete: %s", file.getAbsolutePath()));

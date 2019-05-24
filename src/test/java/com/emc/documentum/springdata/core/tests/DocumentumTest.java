@@ -7,17 +7,19 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.authentication.UserCredentials;
 
 import com.documentum.fc.client.IDfSession;
 import com.documentum.fc.common.DfException;
 import com.emc.documentum.springdata.core.Documentum;
+import com.emc.documentum.springdata.repository.AbstractTest;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-public class DocumentumTest {
+@SpringBootTest(classes = Application.class)
+public class DocumentumTest extends AbstractTest {
 	
 	private UserCredentials credentials;
     @Autowired
@@ -31,13 +33,13 @@ public class DocumentumTest {
 	
 	
 
-    @Before
-    public void setup(){
-        credentials = new UserCredentials("dmadmin", "demo.demo");
-        docBase = "corp";
-        doc.setDocBase(docBase);
-        doc.setCredentials(credentials);
-    }
+//    @Before
+//    public void setup(){
+//        credentials = new UserCredentials("dmadmin", "demo.demo");
+//        docBase = "corp";
+//        doc.setDocBase(docBase);
+//        doc.setCredentials(credentials);
+//    }
 
 	@Test
 	public void testGetCredentials() throws DfException {

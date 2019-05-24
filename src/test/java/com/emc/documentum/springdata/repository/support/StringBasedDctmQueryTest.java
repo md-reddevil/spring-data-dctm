@@ -33,7 +33,7 @@ public class StringBasedDctmQueryTest extends AbstractTest {
     for (Person createdObject : createdObjects) {
       System.out.println(createdObject);
     }
-    personQueryDslRepository.delete(createdObjects);
+    personQueryDslRepository.deleteAll(createdObjects);
   }
 
   @Test

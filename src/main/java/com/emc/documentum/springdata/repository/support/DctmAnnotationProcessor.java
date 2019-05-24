@@ -9,20 +9,20 @@ import javax.lang.model.SourceVersion;
 import javax.tools.Diagnostic;
 
 import com.emc.documentum.springdata.entitymanager.mapping.DctmEntity;
-import com.mysema.query.annotations.QueryEmbeddable;
-import com.mysema.query.annotations.QueryEmbedded;
-import com.mysema.query.annotations.QueryEntities;
-import com.mysema.query.annotations.QuerySupertype;
-import com.mysema.query.annotations.QueryTransient;
-import com.mysema.query.apt.AbstractQuerydslProcessor;
-import com.mysema.query.apt.Configuration;
-import com.mysema.query.apt.DefaultConfiguration;
+import com.querydsl.apt.AbstractQuerydslProcessor;
+import com.querydsl.apt.Configuration;
+import com.querydsl.apt.DefaultConfiguration;
+import com.querydsl.core.annotations.QueryEmbeddable;
+import com.querydsl.core.annotations.QueryEmbedded;
+import com.querydsl.core.annotations.QueryEntities;
+import com.querydsl.core.annotations.QuerySupertype;
+import com.querydsl.core.annotations.QueryTransient;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
  * EMC Confidential: Restricted Internal Distribution
  */
-@SupportedAnnotationTypes({"com.emc.documentum.springdata.entitymanager.mapping.*", "com.mysema.query.annotations.*"})
+@SupportedAnnotationTypes({"com.emc.documentum.springdata.entitymanager.mapping.*", "com.querydsl.annotations.*"})
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class DctmAnnotationProcessor extends AbstractQuerydslProcessor {
   @Override
@@ -34,4 +34,6 @@ public class DctmAnnotationProcessor extends AbstractQuerydslProcessor {
     configuration.setUnknownAsEmbedded(true);
     return configuration;
   }
+  
+  
 }

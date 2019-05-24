@@ -22,8 +22,8 @@ public abstract class AbstractTest {
 
     @PostConstruct
     public void setupDocumentum() {
-        UserCredentials credentials = new UserCredentials("dmadmin", "demo.demo");
-        String docBase = "corp";
+        UserCredentials credentials = new UserCredentials("dmadmin", "password");
+        String docBase = "MyRepo";
         documentum.setDocBase(docBase);
         documentum.setCredentials(credentials);
     }

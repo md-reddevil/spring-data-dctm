@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -69,7 +70,7 @@ public class SimpleDctmRepositoryTest {
     for (Person createdObject : createdObjects) {
       logger.info(createdObject);
     }
-    personRepository.delete(createdObjects);
+    personRepository.deleteAll(createdObjects);
   }
 
   @Test
@@ -88,7 +89,7 @@ public class SimpleDctmRepositoryTest {
     Person barbaraGordon = new Person("Barbara Gordon", 28, "female");
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
-    Iterable<Person> savedObjects = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedObjects = personRepository.saveAll(objectsForInsertion);
     List<Person> createdObjectsList = new LinkedList<>();
     logger.info("Saved the following objects to the repo: ");
     for (Person savedObject : savedObjects) {
@@ -111,8 +112,8 @@ public class SimpleDctmRepositoryTest {
     String originalId = bruceWayne.get_id();
 
     personRepository.save(bruceWayne);
-    Person savedPerson = personRepository.findOne(originalId);
-    assertEquals("New object created", savedPerson.getName(), "Batman");
+    Optional<Person> savedPerson = personRepository.findById(originalId);
+    assertEquals("New object created", savedPerson.get().getName(), "Batman");
   }
 
   @Test
@@ -122,7 +123,7 @@ public class SimpleDctmRepositoryTest {
     Person barbaraGordon = new Person("Barbara Gordon", 28, "female");
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
-    Iterable<Person> savedObjects = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedObjects = personRepository.saveAll(objectsForInsertion);
     List<Person> createdObjectsList = new LinkedList<>();
     logger.info("Saved the following objects to the repo: ");
     for (Person savedObject : savedObjects) {
@@ -137,7 +138,7 @@ public class SimpleDctmRepositoryTest {
     for (Person savedObject : savedObjects) {
       savedObject.setName(updatedName);
     }
-    Iterable<Person> updatedPersons = personRepository.save(savedObjects);
+    Iterable<Person> updatedPersons = personRepository.saveAll(savedObjects);
     for (Person updatedPerson : updatedPersons) {
       assertEquals("Name not set correctly", updatedName, updatedPerson.getName());
     }
@@ -152,7 +153,7 @@ public class SimpleDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    Iterable<Person> savedObjects = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedObjects = personRepository.saveAll(objectsForInsertion);
 
     //Check
     logger.info("Saved the following objects to the repo: ");
@@ -161,12 +162,12 @@ public class SimpleDctmRepositoryTest {
     }
 
     //Find
-    Person foundPerson = personRepository.findOne(savedObjects.iterator().next().get_id());
-    assertNotNull(foundPerson);
+    Optional<Person> foundPerson = personRepository.findById(savedObjects.iterator().next().get_id());
+    assertTrue(foundPerson.isPresent());
     boolean found = false;
 
     for (Person savedObject : savedObjects) {
-      if(savedObject.equals(foundPerson)) {
+      if(savedObject.equals(foundPerson.get())) {
         found = true;
         break;
       }
@@ -180,8 +181,8 @@ public class SimpleDctmRepositoryTest {
     logger.info("Trying to save: " + bruceWayne);
     Person savedBruceWayne = personRepository.save(bruceWayne);
     logger.info("Saved: " + savedBruceWayne);
-
-    assertTrue("Person doesn't exist", personRepository.exists(savedBruceWayne.get_id()));
+    
+    assertTrue("Person doesn't exist", personRepository.existsById(savedBruceWayne.get_id()));
   }
 
   @Test// TODO: Not sure how to reliably test this without depending on the table to be initially empty and only one thread running at a time
@@ -193,7 +194,7 @@ public class SimpleDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    Iterable<Person> savedPeople = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedPeople = personRepository.saveAll(objectsForInsertion);
     logger.info("Saved the following people: ");
     for (Person person : savedPeople) {
       logger.info(person);
@@ -216,7 +217,7 @@ public class SimpleDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    Iterable<Person> savedPeople = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedPeople = personRepository.saveAll(objectsForInsertion);
     List<String> savedIds = new LinkedList<>();
     logger.info("Saved the following people: ");
     for (Person person : savedPeople) {
@@ -225,7 +226,7 @@ public class SimpleDctmRepositoryTest {
     }
 
     //Add for cleanup
-    Iterable<Person> foundObjects = personRepository.findAll(savedIds);
+    Iterable<Person> foundObjects = personRepository.findAllById(savedIds);
     int foundCount = 0;
     for (Person person : foundObjects) {
       foundCount++;
@@ -243,7 +244,7 @@ public class SimpleDctmRepositoryTest {
   List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
   //Do save
-  personRepository.save(objectsForInsertion);
+  personRepository.saveAll(objectsForInsertion);
   long foundCount = personRepository.count();
       
   assertEquals("Count mismatch", foundCount, objectsForInsertion.size());
@@ -259,11 +260,11 @@ public class SimpleDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    Iterable<Person> savedPeople = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedPeople = personRepository.saveAll(objectsForInsertion);
     String personToDeleteId = savedPeople.iterator().next().get_id();
 
-    personRepository.delete(personToDeleteId);
-    assertNull("Person found unexpectedly", personRepository.findOne(personToDeleteId));
+    personRepository.deleteById(personToDeleteId);
+    assertNull("Person found unexpectedly", personRepository.findById(personToDeleteId));
   }
 
   @Test
@@ -275,11 +276,11 @@ public class SimpleDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    Iterable<Person> savedPeople = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedPeople = personRepository.saveAll(objectsForInsertion);
     Person personToDelete = savedPeople.iterator().next();
 
     personRepository.delete(personToDelete);
-    assertNull("Person found unexpectedly", personRepository.findOne(personToDelete.get_id()));
+    assertNull("Person found unexpectedly", personRepository.findById(personToDelete.get_id()));
   }
 
   @Test
@@ -296,14 +297,14 @@ public class SimpleDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    Iterable<Person> savedPeople = personRepository.save(objectsForInsertion);
+    Iterable<Person> savedPeople = personRepository.saveAll(objectsForInsertion);
     List<String> savedPeopleIds = new LinkedList<>();
     for (Person person : savedPeople) {
       savedPeopleIds.add(person.get_id());
     }
 
-    personRepository.delete(savedPeople);
-    Iterable<Person> persons = personRepository.findAll(savedPeopleIds);
+    personRepository.deleteAll(savedPeople);
+    Iterable<Person> persons = personRepository.findAllById(savedPeopleIds);
     assertFalse("Person found unexpectedly", persons.iterator().hasNext());
   }
 }

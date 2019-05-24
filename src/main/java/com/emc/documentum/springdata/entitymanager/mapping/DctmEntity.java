@@ -22,6 +22,7 @@ public @interface DctmEntity {
 
     /**
      * Defines the default language to be used with this document.
+     * @return description
      */
     String language() default "";
 }

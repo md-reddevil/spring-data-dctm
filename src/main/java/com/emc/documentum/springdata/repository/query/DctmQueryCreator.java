@@ -14,11 +14,14 @@ import org.springframework.util.Assert;
 import com.documentum.fc.common.DfException;
 import com.emc.documentum.springdata.entitymanager.attributes.AttributeType;
 import com.emc.documentum.springdata.entitymanager.mapping.MappingHandler;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.ConstantImpl;
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.BooleanOperation;
-import com.mysema.query.types.path.PathBuilder;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanOperation;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberOperation;
+import com.querydsl.core.types.dsl.PathBuilder;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
@@ -52,7 +55,9 @@ public class DctmQueryCreator extends AbstractQueryCreator<DctmQuery, Predicate>
           return pathBuilder.get(getDctmAttributeName(part), part.getProperty().getType()).eq(value);
 
         case GREATER_THAN:
-          return pathBuilder.getNumber(getDctmAttributeName(part), part.getProperty().getType()).gt(new ConstantImpl<>((Number)value));
+          return pathBuilder.getNumber(getDctmAttributeName(part), part.getProperty().getType()).gt(
+        		  Expressions.constant(value)
+        		  );
 
         default:
           throw new UnsupportedOperationException(String.format("Unidentifiable part of the query {%s}", part.getType().name()));

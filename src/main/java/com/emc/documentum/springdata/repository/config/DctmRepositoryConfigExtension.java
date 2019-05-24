@@ -18,12 +18,14 @@ public class DctmRepositoryConfigExtension extends RepositoryConfigurationExtens
   }
 
   @Override
-  public String getRepositoryFactoryClassName() {
-    return DctmRepositoryFactoryBean.class.getName();
+  public String getRepositoryFactoryBeanClassName() {
+  	return DctmRepositoryFactoryBean.class.getName();
   }
 
   @Override
   protected String getModulePrefix() {
     return getModuleName().toLowerCase(Locale.US);
   }
+
+
 }

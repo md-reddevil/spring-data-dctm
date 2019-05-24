@@ -1,12 +1,13 @@
 package com.emc.documentum.springdata.repository.support;
 
-import com.emc.documentum.springdata.entitymanager.mapping.DctmMappingContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
+
+import com.emc.documentum.springdata.entitymanager.mapping.DctmMappingContext;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
@@ -16,7 +17,11 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 
 public class DctmRepositoryFactoryBean extends RepositoryFactoryBeanSupport implements ApplicationContextAware {
 
-  ApplicationContext applicationContext;
+	protected DctmRepositoryFactoryBean(Class repositoryInterface) {
+		super(repositoryInterface);
+	}
+
+ApplicationContext applicationContext;
   @Autowired
   DctmMappingContext mappingContext;
 

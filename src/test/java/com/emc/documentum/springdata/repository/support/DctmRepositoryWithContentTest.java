@@ -24,6 +24,7 @@ import com.emc.documentum.springdata.LoanRepository;
 import com.emc.documentum.springdata.core.Documentum;
 import com.emc.documentum.springdata.core.Loan;
 import com.emc.documentum.springdata.log.AutowiredLogger;
+import com.emc.documentum.springdata.repository.AbstractTest;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
@@ -31,7 +32,7 @@ import com.emc.documentum.springdata.log.AutowiredLogger;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class DctmRepositoryWithContentTest {
+public class DctmRepositoryWithContentTest extends AbstractTest{
 
   //Somehow IntelliJ cribs about this but the runtime manages to autowire these correctly
   @Autowired
@@ -43,13 +44,13 @@ public class DctmRepositoryWithContentTest {
 
   private List<File> filesToClean = new LinkedList<>();
 
-  @PostConstruct
-  public void setupDocumentum() {
-    UserCredentials credentials = new UserCredentials("dmadmin", "demo.demo");
-    String docBase = "corp";
-    documentum.setDocBase(docBase);
-    documentum.setCredentials(credentials);
-  }
+//  @PostConstruct
+//  public void setupDocumentum() {
+//    UserCredentials credentials = new UserCredentials("dmadmin", "demo.demo");
+//    String docBase = "corp";
+//    documentum.setDocBase(docBase);
+//    documentum.setCredentials(credentials);
+//  }
 
   @Before
   public void setUp() throws Exception {
@@ -62,7 +63,7 @@ public class DctmRepositoryWithContentTest {
     for (Loan createdObject : createdObjects) {
       logger.info(createdObject);
     }
-    loanRepository.delete(createdObjects);
+    loanRepository.deleteAll(createdObjects);
     for (File file : filesToClean) {
       if(!file.delete()) {
         System.out.println(String.format("Failed to delete: %s", file.getAbsolutePath()));

@@ -2,7 +2,7 @@ package com.emc.documentum.springdata.repository.query;
 
 import org.springframework.data.domain.Sort;
 
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.types.Predicate;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.

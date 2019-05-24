@@ -25,6 +25,7 @@ import com.emc.documentum.springdata.Person;
 import com.emc.documentum.springdata.PersonQueryDslRepository;
 import com.emc.documentum.springdata.core.Documentum;
 import com.emc.documentum.springdata.log.AutowiredLogger;
+import com.emc.documentum.springdata.repository.AbstractTest;
 
 /*
  * Copyright (c) 2015 EMC Corporation. All Rights Reserved.
@@ -32,7 +33,7 @@ import com.emc.documentum.springdata.log.AutowiredLogger;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class QueryDslDctmRepositoryTest {
+public class QueryDslDctmRepositoryTest extends AbstractTest {
 
   @Autowired
   PersonQueryDslRepository personQueryDslRepository;
@@ -48,16 +49,16 @@ public class QueryDslDctmRepositoryTest {
     for (Person createdObject : createdObjects) {
       logger.info(createdObject);
     }
-    personQueryDslRepository.delete(createdObjects);
+    personQueryDslRepository.deleteAll(createdObjects);
   }
 
-  @PostConstruct
-  public void setupDocumentum() {
-    UserCredentials credentials = new UserCredentials("dmadmin", "demo.demo");
-    String docBase = "corp";
-    documentum.setDocBase(docBase);
-    documentum.setCredentials(credentials);
-  }
+//  @PostConstruct
+//  public void setupDocumentum() {
+//    UserCredentials credentials = new UserCredentials("dmadmin", "demo.demo");
+//    String docBase = "corp";
+//    documentum.setDocBase(docBase);
+//    documentum.setCredentials(credentials);
+//  }
 
   @Test
   @Ignore("This is not the test you are looking for {Jedi hand wave}.")
@@ -95,7 +96,7 @@ public class QueryDslDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    personQueryDslRepository.save(objectsForInsertion);
+    personQueryDslRepository.saveAll(objectsForInsertion);
 
     List<Person> personList = personQueryDslRepository.findByNameOrGender("Bruce Wayne", "female");
     assertEquals("Count mismatch", 2, personList.size());
@@ -115,7 +116,7 @@ public class QueryDslDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, thomasElliot);
 
     //Do save
-    personQueryDslRepository.save(objectsForInsertion);
+    personQueryDslRepository.saveAll(objectsForInsertion);
     List<Person> personList = personQueryDslRepository.findByNameAndAge("Bruce Wayne", 35);
     assertEquals("Count mismatch", 1, personList.size());
   }
@@ -133,7 +134,7 @@ public class QueryDslDctmRepositoryTest {
     List<Person> objectsForInsertion = Arrays.asList(bruceWayne, peterParker, barbaraGordon);
 
     //Do save
-    personQueryDslRepository.save(objectsForInsertion);
+    personQueryDslRepository.saveAll(objectsForInsertion);
 
     List<Person> personList = personQueryDslRepository.findByAgeBetween(17, 20);
     assertEquals("Count mismatch", 2, personList.size());

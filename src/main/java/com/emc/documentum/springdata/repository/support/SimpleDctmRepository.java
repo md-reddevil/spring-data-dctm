@@ -3,6 +3,7 @@ package com.emc.documentum.springdata.repository.support;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -38,7 +39,7 @@ public class SimpleDctmRepository<T, ID extends Serializable> implements DctmRep
   }
 
   @Override
-  public <S extends T> Iterable<S> save(Iterable<S> entities) {
+  public <S extends T> Iterable<S> saveAll(Iterable<S> entities) {
     List<S> retVal = new ArrayList<>();
     for (S entity : entities) {
       retVal.add(save(entity));
@@ -47,19 +48,19 @@ public class SimpleDctmRepository<T, ID extends Serializable> implements DctmRep
   }
 
   @Override
-  public T findOne(ID id) {
+  public Optional<T> findById(ID id) {
     T retVal = null;
     try {
       retVal = dctmTemplate.findById(id.toString(), dctmEntityInformation.getJavaType());
     } catch (DfException e) {
       e.printStackTrace();
     }
-    return retVal;
+    return Optional.of(retVal);
   }
 
   @Override
-  public boolean exists(ID id) {
-    return findOne(id) != null;
+  public boolean existsById(ID id) {
+    return findById(id) != null;
   }
 
   @Override
@@ -74,12 +75,12 @@ public class SimpleDctmRepository<T, ID extends Serializable> implements DctmRep
   }
 
   @Override
-  public Iterable<T> findAll(Iterable<ID> ids) {
+  public Iterable<T> findAllById(Iterable<ID> ids) {
     List<T> foundObjects = new ArrayList<>();
     for (ID id : ids) {
-      T found = findOne(id);
-      if(found != null)
-        foundObjects.add(found);
+      Optional<T> found = findById(id);
+      if(found.isPresent())
+        foundObjects.add(found.get());
     }
     return foundObjects;
   }
@@ -95,7 +96,7 @@ public class SimpleDctmRepository<T, ID extends Serializable> implements DctmRep
   }
 
   @Override
-  public void delete(ID id) {
+  public void deleteById(ID id) {
     try {
       dctmTemplate.deleteById(id.toString());
     } catch (DfException e) {
@@ -113,7 +114,7 @@ public class SimpleDctmRepository<T, ID extends Serializable> implements DctmRep
   }
 
   @Override
-  public void delete(Iterable<? extends T> entities) {
+  public void deleteAll(Iterable<? extends T> entities) {
     for (T entity : entities) {
       try {
         dctmTemplate.delete(entity);

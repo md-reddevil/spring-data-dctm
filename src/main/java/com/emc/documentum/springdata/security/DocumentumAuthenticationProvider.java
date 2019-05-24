@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -43,9 +42,9 @@ public class DocumentumAuthenticationProvider implements AuthenticationProvider 
      * Authentication is hardwired to DCTM. However, this method can be overridden to
      * change the authentication to any custom authentication.
      *
-     * @param authentication
-     * @return
-     * @throws AuthenticationException
+     * @param authentication the authentication
+     * @return authentication
+     * @throws AuthenticationException an exception
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

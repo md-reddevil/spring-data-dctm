@@ -1,6 +1,7 @@
 package com.emc.documentum.springdata.entitymanager.mapping;
 
 import org.springframework.data.mapping.context.AbstractMappingContext;
+import org.springframework.data.mapping.model.Property;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.util.TypeInformation;
 
@@ -16,10 +17,11 @@ public class DctmMappingContext extends AbstractMappingContext<BasicDctmPersiste
         return new BasicDctmPersistentEntity<T>(typeInformation);
     }
 
-    @Override
-    protected DctmPersistentProperty createPersistentProperty(Field field, PropertyDescriptor descriptor,
-                                                              BasicDctmPersistentEntity<?> owner,
-                                                              SimpleTypeHolder simpleTypeHolder) {
-        return new BasicDctmPersistentProperty(field,descriptor, owner, simpleTypeHolder);
-    }
+
+	@Override
+	protected DctmPersistentProperty createPersistentProperty(Property property, BasicDctmPersistentEntity<?> owner,
+			SimpleTypeHolder simpleTypeHolder) {
+		// TODO Auto-generated method stub
+		return new BasicDctmPersistentProperty(property, owner, simpleTypeHolder);
+	}
 }
