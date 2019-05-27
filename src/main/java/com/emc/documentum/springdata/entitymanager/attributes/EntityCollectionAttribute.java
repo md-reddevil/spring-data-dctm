@@ -21,7 +21,7 @@ public class EntityCollectionAttribute<T> extends IterableAttribute<T> {
   }
 
   @Override
-  public T getValue(Object o) throws DfException {
+  protected T doGetValue(Object o) throws DfException {
     return null;
   }
 }

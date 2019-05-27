@@ -11,7 +11,7 @@ public class IntAttribute extends Attribute<Integer> {
     }
 
     @Override
-    public Integer getValue(Object o) throws DfException {
+    protected Integer doGetValue(Object o) throws DfException {
         return ((IDfTypedObject) o).getInt(name);
     }
 }

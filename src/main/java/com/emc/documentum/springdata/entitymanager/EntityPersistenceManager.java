@@ -311,6 +311,7 @@ public class EntityPersistenceManager {
       IDfSession session = documentum.getSession();
       ArrayList<AttributeType> mapping = mappingHandler.getAttributeMappings(entityClass);
       List<T> list = new ArrayList<>();
+//      boolean isSysobject = session.getType(repoObjectName).isSubTypeOf(DfSysObject.TYPE_NAME);
 
       IDfQuery query = new DfQuery();
       String dql = "select * from " + repoObjectName;    // TODO: create a DQL Builder, introspect mapping and make efficient dql
@@ -320,6 +321,8 @@ public class EntityPersistenceManager {
       while (coll.next()) {
         T objectInstance = entityClass.newInstance();
         IDfTypedObject dctmObject = coll.getTypedObject();
+//        if(isSysobject)
+//        	dctmObject = (IDfTypedObject) session.getObject(dctmObject.getId("r_object_id"));
         DCTMToObjectConverter.convert(dctmObject, objectInstance, mapping);
         list.add(objectInstance);
       }
@@ -337,6 +340,7 @@ public class EntityPersistenceManager {
       IDfSession session = documentum.getSession();
       ArrayList<AttributeType> mapping = mappingHandler.getAttributeMappings(entityClass);
       List<T> list = new ArrayList<>();
+//      boolean isSysobject = session.getType(repoObjectName).isSubTypeOf(DfSysObject.TYPE_NAME);
 
       IDfQuery query = new DfQuery();
       String dql = buildQuery(repoObjectName, dctmQuery);
@@ -349,6 +353,9 @@ public class EntityPersistenceManager {
       while (coll.next()) {
         T objectInstance = entityClass.newInstance();
         IDfTypedObject dctmObject = coll.getTypedObject();
+//        if(isSysobject)
+//        	dctmObject = (IDfTypedObject) session.getObject(dctmObject.getId("r_object_id"));
+ 
         DCTMToObjectConverter.convert(dctmObject, objectInstance, mapping);
         list.add(objectInstance);
       }

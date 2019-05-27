@@ -15,7 +15,7 @@ public class BooleanListAttribute extends IterableAttribute<List<Boolean>> {
 	    }
 
 	    @Override
-	    public List<Boolean> getValue(Object o) throws DfException {
+	    protected List<Boolean> doGetValue(Object o) throws DfException {
 	        List<Boolean> values = new ArrayList<Boolean>();
 	        IDfTypedObject obj = (IDfTypedObject) o;
 	        int size = obj.getValueCount(name);

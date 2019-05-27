@@ -11,7 +11,7 @@ public class DoubleAttribute extends Attribute<Double> {
     }
 
     @Override
-    public Double getValue(Object o) throws DfException {
+    protected Double doGetValue(Object o) throws DfException {
         return ((IDfTypedObject) o).getDouble(name);
 
     }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -28,154 +29,166 @@ import com.emc.documentum.springdata.entitymanager.attributes.TypeUtils;
 @Component
 public class MappingHandler {
 
-  @Autowired
-  private EntityTypeHandler typeHandler;
-  private final GenericCache cache;
-  private final GenericCache reverseCache;// TODO change name
-  private final Set<Class<?>> initializingSet = new HashSet<>();
+	@Autowired
+	private EntityTypeHandler typeHandler;
 
-  public MappingHandler() {
-    cache = new GenericCache();
-    reverseCache = new GenericCache();
-  }
+	@Autowired
+	Environment env;
 
-  public <T> String getIdField(T objectOfEntityClass) throws DfException {
-    return getIdField(objectOfEntityClass.getClass());
-  }
+	private final GenericCache cache;
+	private final GenericCache reverseCache;// TODO change name
+	private final Set<Class<?>> initializingSet = new HashSet<>();
 
-  public String getIdField(Class<?> entityClass) throws DfException {
-    Assert.notNull(entityClass, "No class parameter provided, entity collection can't be determined!");
-    if (cache.getEntry(entityClass) == null) {
-      setAttributeMappingInCache(entityClass);
-    }
-    return getIDFromCache(entityClass);
-  }
-
-  @SuppressWarnings("unchecked")
-  private String getIDFromCache(Class<?> entityClass) {
-    Assert.notNull(entityClass, "No class parameter provided, entity collection can't be determined!");
-    ArrayList<AttributeType> mapping = (ArrayList<AttributeType>)cache.getEntry(entityClass);
-
-    for (AttributeType attributeType : mapping) {
-      if (attributeType.getAttribute().getName().equals("r_object_id")) {
-        return attributeType.getFieldName();
-      }
-    }
-    return null;
-  }
-
-  public <T> ArrayList<AttributeType> getAttributeMappings(T objectOfEntityClass) throws DfException {
-    return getAttributeMappings(objectOfEntityClass.getClass());
-  }
-
-  @SuppressWarnings("unchecked")
-  public ArrayList<AttributeType> getAttributeMappings(Class<?> entityClass) throws DfException {
-    Assert.notNull(entityClass, "No class parameter provided, entity collection can't be determined!");
-
-    return cache.getEntry(entityClass) == null ? setAttributeMappingInCache(entityClass) : (ArrayList<AttributeType>)cache.getEntry(entityClass);
-  }
-
-  private ArrayList<AttributeType> setAttributeMappingInCache(Class<?> entityClass) throws DfException {
-
-    initializingSet.add(entityClass);
-    ArrayList<AttributeType> mapping = new ArrayList<>();
-    Field[] fields = getFields(entityClass);
-
-    for (Field field : fields) {
-      field.setAccessible(true);
-
-      if(!isContentAttribute(field)) {
-        if (isRelation(field)) {
-          if(!initializingSet.contains(getRelatedEntityClass(field))) {
-            getAttributeMappings(getRelatedEntityClass(field));
-          }
-        }
-        addMapping(mapping, field);
-      }
-    }
-    cache.setEntry(entityClass, mapping);
-    reverseCache.setEntry(typeHandler.getEntityObjectName(entityClass), entityClass);
-    initializingSet.remove(entityClass);
-    return mapping;
-  }
-
-  public Class<?> getEntityClass(String repositoryEntityName) {
-    return (Class<?>)reverseCache.getEntry(repositoryEntityName);
-  }
-  
-  public Field[] getFields(Class<?> entityClass) throws DfException {
-	  
-    List<Field> fieldList = new ArrayList<Field>();
-	Class<?> tmpClass = entityClass;
-	while (tmpClass != null) {
-	  fieldList.addAll(Arrays.asList(tmpClass.getDeclaredFields()));
-	  tmpClass = tmpClass.getSuperclass();
+	public MappingHandler() {
+		cache = new GenericCache();
+		reverseCache = new GenericCache();
 	}
-    Field[] fields = new Field[fieldList.size()];
-    fields = fieldList.toArray(fields);
-    
-    if (fields.length == 0) {
-      throw new DfException("No fields to map for the given class!");
-    }
-    return fields;
-  }
 
-  private void addMapping(ArrayList<AttributeType> mapping, Field f) {
-    String attributeName = getEntityFieldName(f);
-    Attribute<?> attribute = AttributeFactory.getAttribute(f, attributeName);
-    AttributeType attributeType = new AttributeType(f.getName(), attribute, isRelation(f),
-                                                    isRelation(f) ? f.getAnnotation(Relation.class).name() : "", getRelationshipType(f),
-                                                    getRelatedEntityClass(f));
+	public <T> String getIdField(T objectOfEntityClass) throws DfException {
+		return getIdField(objectOfEntityClass.getClass());
+	}
 
-    mapping.add(attributeType);
-  }
+	public String getIdField(Class<?> entityClass) throws DfException {
+		Assert.notNull(entityClass, "No class parameter provided, entity collection can't be determined!");
+		if (cache.getEntry(entityClass) == null) {
+			setAttributeMappingInCache(entityClass);
+		}
+		return getIDFromCache(entityClass);
+	}
 
-  private RelationshipType getRelationshipType(Field field) {
-    return isRelation(field) ? field.getAnnotation(Relation.class).value() : null;
-  }
+	@SuppressWarnings("unchecked")
+	private String getIDFromCache(Class<?> entityClass) {
+		Assert.notNull(entityClass, "No class parameter provided, entity collection can't be determined!");
+		ArrayList<AttributeType> mapping = (ArrayList<AttributeType>) cache.getEntry(entityClass);
 
-  private Class<?> getRelatedEntityClass(Field field) {
-    if(!isRelation(field))
-      return null;
+		for (AttributeType attributeType : mapping) {
+			if (attributeType.getAttribute().getName().equals("r_object_id")) {
+				return attributeType.getFieldName();
+			}
+		}
+		return null;
+	}
 
-    Class<?> fieldType = field.getType();
-    Type type = TypeUtils.isCollection(fieldType) ? ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0] : field.getGenericType();
-    return (Class)type;
-  }
+	public <T> ArrayList<AttributeType> getAttributeMappings(T objectOfEntityClass) throws DfException {
+		return getAttributeMappings(objectOfEntityClass.getClass());
+	}
 
-  private boolean isRelation(Field f) {
-    return f.getAnnotation(Relation.class) != null;
-  }
+	@SuppressWarnings("unchecked")
+	public ArrayList<AttributeType> getAttributeMappings(Class<?> entityClass) throws DfException {
+		Assert.notNull(entityClass, "No class parameter provided, entity collection can't be determined!");
 
-  private boolean isContentAttribute(Field f) {
-    return f.getAnnotation(Content.class) != null;
-  }
+		return cache.getEntry(entityClass) == null ? setAttributeMappingInCache(entityClass)
+				: (ArrayList<AttributeType>) cache.getEntry(entityClass);
+	}
 
-  private String getEntityFieldName(Field f) {
-    DctmAttribute dctmAttribute;
-    String attributeName;
+	private ArrayList<AttributeType> setAttributeMappingInCache(Class<?> entityClass) throws DfException {
 
-    if (f.isAnnotationPresent(Id.class)) {
-      attributeName = "r_object_id";
-    } else if (f.isAnnotationPresent(DctmAttribute.class)) {
-      dctmAttribute = f.getAnnotation(DctmAttribute.class);
-      attributeName = dctmAttribute == null ? f.getName() : dctmAttribute.value();
-    } else {
-      attributeName = f.getName();
-    }
-    return attributeName;
-  }
+		initializingSet.add(entityClass);
+		ArrayList<AttributeType> mapping = new ArrayList<>();
+		Field[] fields = getFields(entityClass);
 
-  @SuppressWarnings("unchecked")
-  public <T> List<AttributeType> getRelations(T objectToSave) throws DfException {
-    ArrayList<AttributeType> attributeMappings = getAttributeMappings(objectToSave);
-    List relations = new ArrayList();
+		for (Field field : fields) {
+			field.setAccessible(true);
 
-    for (AttributeType attributeType : attributeMappings) {
-      if(attributeType.isRelation()) {
-        relations.add(attributeType);
-      }
-    }
-    return relations;
-  }
+//      if(!isContentAttribute(field)) {
+			if (isRelation(field)) {
+				if (!initializingSet.contains(getRelatedEntityClass(field))) {
+					getAttributeMappings(getRelatedEntityClass(field));
+				}
+			}
+			addMapping(mapping, field);
+//      }
+		}
+		cache.setEntry(entityClass, mapping);
+		reverseCache.setEntry(typeHandler.getEntityObjectName(entityClass), entityClass);
+		initializingSet.remove(entityClass);
+		return mapping;
+	}
+
+	public Class<?> getEntityClass(String repositoryEntityName) {
+		return (Class<?>) reverseCache.getEntry(repositoryEntityName);
+	}
+
+	public Field[] getFields(Class<?> entityClass) throws DfException {
+
+		List<Field> fieldList = new ArrayList<Field>();
+		Class<?> tmpClass = entityClass;
+		while (tmpClass != null) {
+			fieldList.addAll(Arrays.asList(tmpClass.getDeclaredFields()));
+			tmpClass = tmpClass.getSuperclass();
+		}
+		Field[] fields = new Field[fieldList.size()];
+		fields = fieldList.toArray(fields);
+
+		if (fields.length == 0) {
+			throw new DfException("No fields to map for the given class!");
+		}
+		return fields;
+	}
+
+	private void addMapping(ArrayList<AttributeType> mapping, Field f) {
+		String attributeName = getEntityFieldName(f);
+
+		Attribute<?> attribute = AttributeFactory.getAttribute(f, attributeName);
+		AttributeType attributeType = new AttributeType(f.getName(), attribute, isRelation(f),
+				isRelation(f) ? f.getAnnotation(Relation.class).name() : "", getRelationshipType(f),
+				getRelatedEntityClass(f), isContentAttribute(f));
+
+		mapping.add(attributeType);
+	}
+
+	private RelationshipType getRelationshipType(Field field) {
+		return isRelation(field) ? field.getAnnotation(Relation.class).value() : null;
+	}
+
+	private Class<?> getRelatedEntityClass(Field field) {
+		if (!isRelation(field))
+			return null;
+
+		Class<?> fieldType = field.getType();
+		Type type = TypeUtils.isCollection(fieldType)
+				? ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]
+				: field.getGenericType();
+		return (Class) type;
+	}
+
+	private boolean isRelation(Field f) {
+		return f.getAnnotation(Relation.class) != null;
+	}
+
+	private boolean isContentAttribute(Field f) {
+		return f.getAnnotation(Content.class) != null;
+	}
+
+	private String getEntityFieldName(Field f) {
+		DctmAttribute dctmAttribute;
+		String attributeName;
+
+		if (f.isAnnotationPresent(Id.class)) {
+			attributeName = "r_object_id";
+		} else if (f.isAnnotationPresent(DctmAttribute.class)) {
+			dctmAttribute = f.getAnnotation(DctmAttribute.class);
+			attributeName = dctmAttribute == null ? f.getName() : dctmAttribute.value();
+			if (attributeName.matches("\\$\\{.*\\}")) {
+				String envProperty = attributeName.replace("${", "").replace("}", "");
+				attributeName = env.getProperty(envProperty);
+			}
+		} else {
+			attributeName = f.getName();
+		}
+		return attributeName;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> List<AttributeType> getRelations(T objectToSave) throws DfException {
+		ArrayList<AttributeType> attributeMappings = getAttributeMappings(objectToSave);
+		List relations = new ArrayList();
+
+		for (AttributeType attributeType : attributeMappings) {
+			if (attributeType.isRelation()) {
+				relations.add(attributeType);
+			}
+		}
+		return relations;
+	}
 }

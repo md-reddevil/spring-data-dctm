@@ -5,7 +5,7 @@
     <groupId>com.emc.documentum.spring</groupId>
     <artifactId>spring-data-documentum</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.2</version>
+    <version>0.0.4</version>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

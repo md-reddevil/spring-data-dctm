@@ -15,7 +15,7 @@ public class IntListAttribute extends IterableAttribute<List<Integer>> {
 	    }
 
 	    @Override
-	    public List<Integer> getValue(Object o) throws DfException {
+	    protected List<Integer> doGetValue(Object o) throws DfException {
 	        List<Integer> values = new ArrayList<Integer>();
 	        IDfTypedObject obj = (IDfTypedObject) o;
 	        int size = obj.getValueCount(name);

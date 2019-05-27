@@ -9,7 +9,7 @@ public class ObjectAttribute extends Attribute<Object> {
     }
 
     @Override
-    public Object getValue(Object o) throws DfException {
+    protected Object doGetValue(Object o) throws DfException {
         return null;
     }
 }

@@ -13,7 +13,7 @@ public class EntityAttribute<T> extends Attribute<T> {
   }
 
   @Override
-  public T getValue(Object o) throws DfException {
+  protected T doGetValue(Object o) throws DfException {
     return null;
   }
 }

@@ -14,7 +14,7 @@ public class LongListAttribute extends IterableAttribute<List<Long>> {
 	    }
 
 	    @Override
-	    public List<Long> getValue(Object o) throws DfException {
+	    protected List<Long> doGetValue(Object o) throws DfException {
 	        List<Long> values = new ArrayList<Long>();
 	        IDfTypedObject obj = (IDfTypedObject) o;
 	        int size = obj.getValueCount(name);

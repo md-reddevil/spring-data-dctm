@@ -33,6 +33,7 @@ public class DctmAutoConfiguration {
     public DctmMappingContext mongoMappingContext(BeanFactory beanFactory)
             throws ClassNotFoundException {
         DctmMappingContext context = new DctmMappingContext();
+
         return context;
     }
 }

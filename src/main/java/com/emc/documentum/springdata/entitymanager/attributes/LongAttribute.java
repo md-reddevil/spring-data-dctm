@@ -11,7 +11,7 @@ public class LongAttribute extends Attribute<Long> {
     }
 
     @Override
-    public Long getValue(Object o) throws DfException {
+    protected Long doGetValue(Object o) throws DfException {
         return ((IDfTypedObject) o).getLong(name);
 
     }

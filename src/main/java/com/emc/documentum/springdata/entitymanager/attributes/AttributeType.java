@@ -10,13 +10,14 @@ public class AttributeType {
     private final String relationName;
     private final RelationshipType relationshipType;
     private final Class<?> relatedEntityClass;
+    private final boolean isContent;
 
     public AttributeType(String fieldName, Attribute<?> attribute) {
-        this(fieldName, attribute, false, "", null, null);
+        this(fieldName, attribute, false, "", null, null, false);
     }
 
     public AttributeType(
-        String fieldName, Attribute<?> attribute, boolean isRelation, String relationName, RelationshipType relationshipType, Class<?> relatedEntityClass
+        String fieldName, Attribute<?> attribute, boolean isRelation, String relationName, RelationshipType relationshipType, Class<?> relatedEntityClass, boolean isContent
     ) {
         this.fieldName = fieldName;
         this.attribute = attribute;
@@ -24,6 +25,7 @@ public class AttributeType {
         this.relationName = relationName;
         this.relationshipType = relationshipType;
         this.relatedEntityClass = relatedEntityClass;
+        this.isContent = isContent;
     }
 
     public String getFieldName() {
@@ -61,4 +63,8 @@ public class AttributeType {
             ", relatedEntityClass=" + relatedEntityClass +
             '}';
     }
+
+	public boolean isContent() {
+		return isContent;
+	}
 }

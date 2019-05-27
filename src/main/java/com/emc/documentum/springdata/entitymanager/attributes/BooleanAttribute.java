@@ -11,7 +11,7 @@ public class BooleanAttribute extends Attribute<Boolean> {
     }
 
     @Override
-    public Boolean getValue(Object o) throws DfException {
+    protected Boolean doGetValue(Object o) throws DfException {
         return ((IDfTypedObject) o).getBoolean(name);
     }
 }
